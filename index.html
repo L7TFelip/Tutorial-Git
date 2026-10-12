@@ -1,18 +1,30 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guia de Comandos Git</title>
+
+    <meta name="theme-color" content="#0d1117">
+    <meta name="description" content="Guia interativo de comandos Git com exemplos, busca e botões para copiar comandos completos.">
+
+    <title>GitGuide | Guia de Comandos Git</title>
+
     <style>
         :root {
-            --bg-color: #0d1117;
-            --card-bg: #161b22;
-            --text-color: #c9d1d9;
-            --text-bright: #f0f6fc;
-            --accent-color: #58a6ff;
-            --cmd-bg: #21262d;
-            --border-color: #30363d;
+            --bg: #0d1117;
+            --surface: #161b22;
+            --surface-2: #1c2129;
+            --surface-3: #21262d;
+            --border: #30363d;
+            --text: #e6edf3;
+            --muted: #8b949e;
+            --blue: #58a6ff;
+            --green: #3fb950;
+            --purple: #bc8cff;
+            --orange: #f0883e;
+            --red: #f85149;
+            --radius: 14px;
         }
 
         * {
@@ -21,229 +33,1765 @@
             padding: 0;
         }
 
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            min-height: 100vh;
+            background:
+                radial-gradient(
+                    ellipse at 50% -15%,
+                    rgba(56, 139, 253, 0.13),
+                    transparent 55%
+                ),
+                var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont,
+                "Segoe UI", sans-serif;
             line-height: 1.6;
-            padding: 2rem 1rem;
+        }
+
+        button, input {
+            font: inherit;
+        }
+
+        button {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        a:focus-visible {
+            outline: 2px solid var(--blue);
+            outline-offset: 4px;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        code, pre {
+            font-family: "Cascadia Code", "SFMono-Regular",
+                Consolas, monospace;
         }
 
         .container {
-            max-width: 900px;
-            margin: 0 auto;
+            width: min(1120px, calc(100% - 36px));
+            margin-inline: auto;
         }
 
-        header {
+        /* CABEÇALHO */
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(13, 17, 23, 0.88);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav {
+            min-height: 66px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-size: 19px;
+            font-weight: 750;
+            letter-spacing: -0.6px;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            border-radius: 11px;
+            background: rgba(56, 139, 253, 0.12);
+            color: var(--blue);
+        }
+
+        .brand-icon svg {
+            width: 23px;
+            height: 23px;
+        }
+
+        .brand span {
+            color: var(--blue);
+        }
+
+        .nav-label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* APRESENTAÇÃO */
+
+        .hero {
+            padding: 70px 0 35px;
             text-align: center;
-            margin-bottom: 3rem;
         }
 
-        header h1 {
-            color: var(--text-bright);
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            background: rgba(22, 27, 34, 0.8);
+            color: #79c0ff;
+            font-size: 12px;
+            font-weight: 650;
         }
 
-        header p {
-            color: #8b949e;
-            font-size: 1.1rem;
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 10px rgba(63, 185, 80, 0.4);
         }
 
-        /* Menu de Filtros */
+        h1 {
+            max-width: 800px;
+            margin: 0 auto 18px;
+            color: #f0f6fc;
+            font-size: clamp(34px, 6vw, 60px);
+            line-height: 1.1;
+            letter-spacing: -2.2px;
+        }
+
+        h1 span {
+            color: var(--blue);
+        }
+
+        .hero-description {
+            max-width: 640px;
+            margin: 0 auto;
+            color: var(--muted);
+            font-size: 16px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .stat {
+            padding: 7px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(22, 27, 34, 0.7);
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .stat strong {
+            color: var(--text);
+        }
+
+        /* BUSCA */
+
+        .search-area {
+            max-width: 680px;
+            margin: 34px auto 0;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 5px 7px 5px 16px;
+            border: 1px solid #3d4857;
+            border-radius: 12px;
+            background: var(--surface);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.16);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+        }
+
+        .search-icon {
+            flex-shrink: 0;
+            color: var(--muted);
+            font-size: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            min-width: 0;
+            padding: 12px 0;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .search-box input::placeholder {
+            color: #768390;
+        }
+
+        .search-box input:focus-visible {
+            outline: none;
+        }
+
+        .search-hint {
+            padding: 5px 9px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--muted);
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        /* NAVEGAÇÃO DE CATEGORIAS */
+
+        .filters-wrap {
+            position: sticky;
+            top: 66px;
+            z-index: 10;
+            padding: 13px 0;
+            border-bottom: 1px solid rgba(48, 54, 61, 0.7);
+            background: rgba(13, 17, 23, 0.94);
+            backdrop-filter: blur(12px);
+        }
+
         .filters {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 2.5rem;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .filter-btn {
-            background-color: var(--card-bg);
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            padding: 0.6rem 1.2rem;
-            border-radius: 20px;
+            padding: 8px 13px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--muted);
             cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s ease;
+            font-size: 12px;
+            font-weight: 600;
+            transition: 0.2s;
         }
 
-        .filter-btn:hover, .filter-btn.active {
-            background-color: var(--accent-color);
-            color: var(--bg-color);
-            border-color: var(--accent-color);
+        .filter-btn:hover {
+            background: var(--surface);
+            color: var(--text);
         }
 
-        /* Categorias e Grid */
-        .category-section {
-            margin-bottom: 3rem;
-            scroll-margin-top: 20px;
+        .filter-btn.active {
+            border-color: rgba(88, 166, 255, 0.25);
+            background: rgba(56, 139, 253, 0.12);
+            color: #79c0ff;
         }
 
-        .category-title {
-            color: var(--text-bright);
-            font-size: 1.5rem;
-            margin-bottom: 1.2rem;
-            padding-bottom: 0.4rem;
-            border-bottom: 2px solid var(--border-color);
+        /* CONTEÚDO */
+
+        main {
+            padding: 35px 0 70px;
+        }
+
+        .section-heading {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 19px;
+        }
+
+        .section-heading h2 {
+            font-size: 21px;
+            letter-spacing: -0.5px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .category-section {
+            margin-bottom: 43px;
+            scroll-margin-top: 145px;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 14px;
+            margin-bottom: 17px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .category-icon {
+            display: grid;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: var(--surface);
+            color: var(--blue);
+            font-size: 19px;
+        }
+
+        .category-header h2 {
+            font-size: 18px;
+            letter-spacing: -0.3px;
+        }
+
+        .category-header p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .command-count {
+            margin-left: auto;
+            color: var(--muted);
+            font-size: 11px;
+            white-space: nowrap;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
         }
 
-        @media (min-width: 768px) {
-            .grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
+        /* CARTÕES */
 
-        /* Cartões de Comando */
         .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.2rem;
+            min-width: 0;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: linear-gradient(
+                145deg,
+                rgba(22, 27, 34, 0.98),
+                rgba(22, 27, 34, 0.78)
+            );
+            transition: border-color 0.2s, transform 0.2s,
+                box-shadow 0.2s;
         }
 
         .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            border-color: #444c56;
+            transform: translateY(-3px);
+            border-color: #46566a;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 13px;
+        }
+
+        .card h3 {
+            margin-bottom: 4px;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .card-subtitle {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .tag {
+            padding: 4px 7px;
+            border: 1px solid rgba(88, 166, 255, 0.22);
+            border-radius: 6px;
+            background: rgba(56, 139, 253, 0.08);
+            color: #79c0ff;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        .tag.warning {
+            border-color: rgba(240, 136, 62, 0.25);
+            background: rgba(240, 136, 62, 0.08);
+            color: #f0a35e;
         }
 
         .cmd-box {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            background-color: var(--cmd-bg);
-            padding: 0.6rem 0.8rem;
-            border-radius: 6px;
-            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-            font-size: 0.9rem;
-            color: var(--accent-color);
-            margin-bottom: 0.8rem;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            justify-content: space-between;
+            gap: 8px;
+            padding: 11px;
+            border: 1px solid #303944;
+            border-radius: 9px;
+            background: #0b0e13;
+        }
+
+        .cmd-box code {
+            min-width: 0;
+            overflow-x: auto;
+            color: #a5d6ff;
+            font-size: 12px;
+            line-height: 1.8;
+            white-space: pre;
+            scrollbar-width: thin;
         }
 
         .copy-btn {
-            background: none;
-            border: none;
-            color: #8b949e;
+            display: inline-flex;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-height: 32px;
+            padding: 6px 9px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            background: var(--surface-2);
+            color: #c9d1d9;
             cursor: pointer;
-            padding: 0.2rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            transition: color 0.2s;
+            font-size: 11px;
+            font-weight: 650;
+            transition: 0.2s;
         }
 
         .copy-btn:hover {
-            color: var(--text-bright);
+            border-color: var(--blue);
+            background: rgba(56, 139, 253, 0.13);
+            color: #79c0ff;
+        }
+
+        .copy-btn.copied {
+            border-color: rgba(63, 185, 80, 0.45);
+            background: rgba(63, 185, 80, 0.1);
+            color: #7ee787;
         }
 
         .description {
-            font-size: 0.95rem;
-            color: var(--text-color);
+            margin-top: 13px;
+            color: #a8b3c0;
+            font-size: 13px;
+        }
+
+        .example {
+            margin-top: 13px;
+            padding-top: 11px;
+            border-top: 1px solid rgba(48, 54, 61, 0.7);
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .example strong {
+            color: #c9d1d9;
+        }
+
+        .example code {
+            color: #d2a8ff;
+            overflow-wrap: anywhere;
+        }
+
+        .warning-text {
+            margin-top: 12px;
+            padding: 10px;
+            border-left: 2px solid var(--orange);
+            border-radius: 0 6px 6px 0;
+            background: rgba(240, 136, 62, 0.06);
+            color: #d9a56d;
+            font-size: 11px;
+        }
+
+        /* PASSO A PASSO */
+
+        .workflow {
+            padding: 24px;
+            margin-bottom: 45px;
+            border: 1px solid rgba(88, 166, 255, 0.25);
+            border-radius: 16px;
+            background:
+                radial-gradient(
+                    ellipse at top left,
+                    rgba(56, 139, 253, 0.09),
+                    transparent 65%
+                ),
+                var(--surface);
+        }
+
+        .workflow-heading {
+            display: flex;
+            align-items: flex-start;
+            gap: 13px;
+            margin-bottom: 18px;
+        }
+
+        .workflow-heading .category-icon {
+            color: var(--green);
+        }
+
+        .workflow-heading h2 {
+            margin-bottom: 4px;
+            font-size: 19px;
+        }
+
+        .workflow-heading p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .step {
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: rgba(13, 17, 23, 0.65);
+        }
+
+        .step-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            color: #c9d1d9;
+            font-size: 12px;
+            font-weight: 650;
+        }
+
+        .step-number {
+            display: grid;
+            place-items: center;
+            width: 23px;
+            height: 23px;
+            border-radius: 7px;
+            background: rgba(63, 185, 80, 0.12);
+            color: #7ee787;
+            font-size: 11px;
+        }
+
+        .step .cmd-box {
+            padding: 8px;
+        }
+
+        .step .cmd-box code {
+            font-size: 11px;
+        }
+
+        .step-note {
+            margin-top: 9px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .workflow-tip {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 9px;
+            background: rgba(88, 166, 255, 0.07);
+            color: #a8c7e8;
+            font-size: 12px;
+        }
+
+        /* RESULTADOS E RODAPÉ */
+
+        .empty-state {
+            display: none;
+            padding: 50px 20px;
+            border: 1px dashed var(--border);
+            border-radius: 14px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .empty-state strong {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-size: 17px;
+        }
+
+        footer {
+            padding: 25px 0;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        footer strong {
+            color: var(--text);
+        }
+
+        .toast {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 50;
+            max-width: calc(100% - 44px);
+            padding: 13px 17px;
+            border: 1px solid #285d35;
+            border-radius: 10px;
+            background: #13251a;
+            color: #7ee787;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+            font-size: 13px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
+            transition: 0.2s;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        /* RESPONSIVIDADE */
+
+        @media (max-width: 700px) {
+            .hero {
+                padding-top: 48px;
+            }
+
+            h1 {
+                letter-spacing: -1.5px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                justify-content: flex-start;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding-bottom: 2px;
+                scrollbar-width: thin;
+            }
+
+            .filter-btn {
+                flex-shrink: 0;
+            }
+
+            .nav-label {
+                display: none;
+            }
+
+            .workflow {
+                padding: 17px;
+            }
+
+            .category-header h2 {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .container {
+                width: calc(100% - 24px);
+            }
+
+            .hero-description {
+                font-size: 14px;
+            }
+
+            .search-hint {
+                display: none;
+            }
+
+            .card {
+                padding: 13px;
+            }
+
+            .cmd-box {
+                padding: 8px;
+            }
+
+            .cmd-box code {
+                font-size: 11px;
+            }
+
+            .copy-btn {
+                padding: 6px 7px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
+                animation: none !important;
+            }
         }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <header>
-        <h1>Guia de Comandos Git</h1>
-        <p>Sua folha de cola interativa para o terminal</p>
-    </header>
+<header class="topbar">
+    <div class="container nav">
+        <a class="brand" href="#" aria-label="GitGuide, página inicial">
+            <span class="brand-icon">
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round"
+                     aria-hidden="true">
+                    <path d="m12 3 9 9-9 9-9-9 9-9Z"/>
+                    <path d="m9 9 6 6"/>
+                    <path d="m15 9-6 6"/>
+                    <circle cx="9" cy="9" r="1.5" fill="currentColor"/>
+                    <circle cx="15" cy="15" r="1.5" fill="currentColor"/>
+                </svg>
+            </span>
+            Git<span>Guide</span>
+        </a>
 
-    <!-- Filtros Dinâmicos -->
-    <div class="filters">
-        <button class="filter-btn active" onclick="filterCategory('all')">Todos</button>
-        <button class="filter-btn" onclick="filterCategory('init')">Iniciar & Configurar</button>
-        <button class="filter-btn" onclick="filterCategory('daily')">Fluxo Diário</button>
-        <button class="filter-btn" onclick="filterCategory('sync')">Sincronização</button>
-        <button class="filter-btn" onclick="filterCategory('branch')">Branches</button>
-        <button class="filter-btn" onclick="filterCategory('history')">Histórico & Desfazer</button>
+        <span class="nav-label">Documentação prática para desenvolvedores</span>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="container">
+
+        <div class="eyebrow">
+            <span class="status-dot"></span>
+            SEU GUIA DE GIT E GITHUB
+        </div>
+
+        <h1>Domine o Git.<br><span>Um comando por vez.</span></h1>
+
+        <p class="hero-description">
+            Encontre comandos, entenda para que servem e copie tudo
+            com um clique. Sem precisar decorar dezenas de comandos.
+        </p>
+
+        <div class="hero-stats">
+            <div class="stat"><strong>25+</strong> comandos úteis</div>
+            <div class="stat"><strong>5</strong> categorias</div>
+            <div class="stat"><strong>100%</strong> interativo</div>
+        </div>
+
+        <div class="search-area">
+            <label class="search-box" for="search">
+                <span class="search-icon" aria-hidden="true">⌕</span>
+                <input
+                    type="search"
+                    id="search"
+                    placeholder="Buscar comando, descrição ou exemplo..."
+                    autocomplete="off"
+                    aria-label="Buscar comandos Git"
+                >
+                <span class="search-hint">Buscar</span>
+            </label>
+        </div>
+
+    </div>
+</section>
+
+<nav class="filters-wrap" aria-label="Categorias de comandos">
+    <div class="container filters">
+        <button class="filter-btn active" data-filter="all">Todos</button>
+        <button class="filter-btn" data-filter="init">Configuração</button>
+        <button class="filter-btn" data-filter="daily">Dia a dia</button>
+        <button class="filter-btn" data-filter="sync">GitHub</button>
+        <button class="filter-btn" data-filter="branch">Branches</button>
+        <button class="filter-btn" data-filter="history">Histórico</button>
+    </div>
+</nav>
+
+<main class="container">
+
+    <!-- GUIA DE PRIMEIRO ENVIO -->
+
+    <section class="workflow" id="workflow">
+        <div class="workflow-heading">
+            <div class="category-icon">↑</div>
+            <div>
+                <h2>Seu primeiro envio para o GitHub</h2>
+                <p>Uma sequência prática para publicar um projeto local.</p>
+            </div>
+        </div>
+
+        <div class="steps">
+
+            <article class="step">
+                <div class="step-label">
+                    <span class="step-number">1</span>
+                    Entre na pasta do projeto
+                </div>
+                <div class="cmd-box">
+                    <code>cd "caminho/do/projeto"</code>
+                    <button class="copy-btn"
+                        data-copy='cd "caminho/do/projeto"'
+                        aria-label="Copiar comando para entrar na pasta">
+                        Copiar
+                    </button>
+                </div>
+                <p class="step-note">
+                    Substitua pelo caminho real da sua pasta.
+                </p>
+            </article>
+
+            <article class="step">
+                <div class="step-label">
+                    <span class="step-number">2</span>
+                    Inicie o Git
+                </div>
+                <div class="cmd-box">
+                    <code>git init</code>
+                    <button class="copy-btn" data-copy="git init">Copiar</button>
+                </div>
+                <p class="step-note">
+                    Execute se a pasta ainda não for um repositório Git.
+                </p>
+            </article>
+
+            <article class="step">
+                <div class="step-label">
+                    <span class="step-number">3</span>
+                    Prepare os arquivos
+                </div>
+                <div class="cmd-box">
+                    <code>git add .</code>
+                    <button class="copy-btn" data-copy="git add .">Copiar</button>
+                </div>
+                <p class="step-note">
+                    Adiciona as alterações da pasta ao próximo commit.
+                </p>
+            </article>
+
+            <article class="step">
+                <div class="step-label">
+                    <span class="step-number">4</span>
+                    Crie um commit
+                </div>
+                <div class="cmd-box">
+                    <code>git commit -m "Primeiro commit"</code>
+                    <button class="copy-btn"
+                        data-copy='git commit -m "Primeiro commit"'>
+                        Copiar
+                    </button>
+                </div>
+                <p class="step-note">
+                    Registra uma versão das alterações preparadas.
+                </p>
+            </article>
+
+            <article class="step">
+                <div class="step-label">
+                    <span class="step-number">5</span>
+                    Defina a branch principal
+                </div>
+                <div class="cmd-box">
+                    <code>git branch -M main</code>
+                    <button class="copy-btn"
+                        data-copy="git branch -M main">Copiar</button>
+                </div>
+                <p class="step-note">
+                    Padroniza o nome da branch local como main.
+                </p>
+            </article>
+
+            <article class="step">
+                <div class="step-label">
+                    <span class="step-number">6</span>
+                    Conecte ao GitHub
+                </div>
+                <div class="cmd-box">
+                    <code>git remote add origin URL</code>
+                    <button class="copy-btn"
+                        data-copy="git remote add origin URL">
+                        Copiar
+                    </button>
+                </div>
+                <p class="step-note">
+                    Troque URL pela URL HTTPS do seu repositório.
+                </p>
+            </article>
+
+            <article class="step">
+                <div class="step-label">
+                    <span class="step-number">7</span>
+                    Envie o projeto
+                </div>
+                <div class="cmd-box">
+                    <code>git push -u origin main</code>
+                    <button class="copy-btn"
+                        data-copy="git push -u origin main">
+                        Copiar
+                    </button>
+                </div>
+                <p class="step-note">
+                    Publica a branch main e configura o rastreamento.
+                </p>
+            </article>
+
+        </div>
+
+        <div class="workflow-tip">
+            <strong>Importante:</strong> crie o repositório no GitHub e
+            copie sua URL antes do passo 6. Se o repositório já tiver
+            arquivos ou commits, talvez seja necessário sincronizá-lo
+            antes do primeiro envio. Configure também seu nome e e-mail
+            no Git antes de criar commits.
+        </div>
+    </section>
+
+    <div class="section-heading">
+        <h2>Biblioteca de comandos</h2>
+        <p id="result-count" aria-live="polite">Carregando comandos...</p>
     </div>
 
-    <!-- Lista de Comandos -->
-    <main id="commands-list">
-        
-        <!-- Iniciar e Configurar -->
+    <div id="commands-list">
+
+        <!-- CONFIGURAÇÃO -->
+
         <section class="category-section" data-cat="init">
-            <h2 class="category-title">📁 Iniciar e Configurar</h2>
+            <div class="category-header">
+                <div class="category-icon">⚙</div>
+                <div>
+                    <h2>Iniciar e configurar</h2>
+                    <p>Prepare seu ambiente de desenvolvimento.</p>
+                </div>
+                <span class="command-count">04 comandos</span>
+            </div>
+
             <div class="grid">
-                <div class="card">
-                    <div class="cmd-box"><code>git init</code><button class="copy-btn" onclick="copyText('git init', this)">Copiar</button></div>
-                    <p class="description">Inicializa um novo repositório Git local na pasta atual.</p>
-                </div>
-                <div class="card">
-                    <div class="cmd-box"><code>git clone [url]</code><button class="copy-btn" onclick="copyText('git clone', this)">Copiar</button></div>
-                    <p class="description">Baixa um repositório existente da internet para a sua máquina.</p>
-                </div>
-                <div class="card">
-                    <div class="cmd-box"><code>git config --global user.name "[nome]"</code><button class="copy-btn" onclick="copyText('git config --global user.name', this)">Copiar</button></div>
-                    <p class="description">Define o nome que será associado aos seus commits.</p>
-                </div>
-                <div class="card">
-                    <div class="cmd-box"><code>git config --global user.email "[email]"</code><button class="copy-btn" onclick="copyText('git config --global user.email', this)">Copiar</button></div>
-                    <p class="description">Define o e-mail que será associado aos seus commits.</p>
-                </div>
+
+                <article class="card" data-search="git init iniciar criar repositório pasta local">
+                    <div class="card-top">
+                        <div>
+                            <h3>Iniciar repositório</h3>
+                            <p class="card-subtitle">Cria um repositório local.</p>
+                        </div>
+                        <span class="tag">Básico</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git init</code>
+                        <button class="copy-btn" data-copy="git init">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Começa a rastrear o projeto com Git na pasta atual.
+                    </p>
+                    <p class="example">
+                        <strong>Quando usar:</strong> ao começar um projeto novo.
+                    </p>
+                </article>
+
+                <article class="card" data-search="git clone baixar copiar repositório existente url github">
+                    <div class="card-top">
+                        <div>
+                            <h3>Clonar repositório</h3>
+                            <p class="card-subtitle">Baixa um projeto existente.</p>
+                        </div>
+                        <span class="tag">Básico</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git clone URL</code>
+                        <button class="copy-btn"
+                            data-copy="git clone URL">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Cria uma cópia local de um repositório remoto.
+                    </p>
+                    <p class="example">
+                        <strong>Exemplo:</strong>
+                        <code>git clone https://github.com/usuario/projeto.git</code>
+                    </p>
+                </article>
+
+                <article class="card" data-search="git config nome usuário user.name configurar commit">
+                    <div class="card-top">
+                        <div>
+                            <h3>Configurar seu nome</h3>
+                            <p class="card-subtitle">Identificação dos commits.</p>
+                        </div>
+                        <span class="tag">Configuração</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git config --global user.name "Seu Nome"</code>
+                        <button class="copy-btn"
+                            data-copy='git config --global user.name "Seu Nome"'>
+                            Copiar
+                        </button>
+                    </div>
+                    <p class="description">
+                        Define o nome associado aos seus próximos commits.
+                    </p>
+                    <p class="example">
+                        <strong>Exemplo:</strong>
+                        <code>git config --global user.name "João Silva"</code>
+                    </p>
+                </article>
+
+                <article class="card" data-search="git config email user.email configurar conta commit">
+                    <div class="card-top">
+                        <div>
+                            <h3>Configurar seu e-mail</h3>
+                            <p class="card-subtitle">Identificação dos commits.</p>
+                        </div>
+                        <span class="tag">Configuração</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git config --global user.email "email"</code>
+                        <button class="copy-btn"
+                            data-copy='git config --global user.email "seu@email.com"'>
+                            Copiar
+                        </button>
+                    </div>
+                    <p class="description">
+                        Define o e-mail registrado nos commits.
+                    </p>
+                    <p class="example">
+                        <strong>Exemplo:</strong>
+                        <code>git config --global user.email "voce@email.com"</code>
+                    </p>
+                </article>
+
             </div>
         </section>
 
-        <!-- Fluxo Diário -->
+        <!-- FLUXO DIÁRIO -->
+
         <section class="category-section" data-cat="daily">
-            <h2 class="category-title">💻 Fluxo Diário de Trabalho</h2>
+            <div class="category-header">
+                <div class="category-icon">⌘</div>
+                <div>
+                    <h2>Fluxo diário</h2>
+                    <p>Confira, prepare e registre suas alterações.</p>
+                </div>
+                <span class="command-count">06 comandos</span>
+            </div>
+
             <div class="grid">
-                <div class="card">
-                    <div class="cmd-box"><code>git status</code><button class="copy-btn" onclick="copyText('git status', this)">Copiar</button></div>
-                    <p class="description">Mostra o estado atual dos seus arquivos (modificados, deletados ou criados).</p>
-                </div>
-                <div class="card">
-                    <div class="cmd-box"><code>git add [arquivo]</code><button class="copy-btn" onclick="copyText('git add', this)">Copiar</button></div>
-                    <p class="description">Salva as alterações de um arquivo específico na área de preparação (staging area).</p>
-                </div>
-                <div class="card">
-                    <div class="cmd-box"><code>git add .</code><button class="copy-btn" onclick="copyText('git add .', this)">Copiar</button></div>
-                    <p class="description">Adiciona todas as modificações da pasta atual para a área de preparação.</p>
-                </div>
-                <div class="card">
-                    <div class="cmd-box"><code>git commit -m "[mensagem]"</code><button class="copy-btn" onclick="copyText('git commit -m', this)">Copiar</button></div>
-                    <p class="description">Grava permanentemente as alterações no histórico local.</p>
-                </div>
-                <div class="card">
-                    <div class="cmd-box"><code>git commit --amend</code><button class="copy-btn" onclick="copyText('git commit --amend', this)">Copiar</button></div>
-                    <p class="description">Altera a mensagem do último commit realizado (antes do push).</p>
-                </div>
+
+                <article class="card" data-search="git status verificar estado arquivos modificados criados deletados">
+                    <div class="card-top">
+                        <div>
+                            <h3>Verificar alterações</h3>
+                            <p class="card-subtitle">Veja o estado do projeto.</p>
+                        </div>
+                        <span class="tag">Essencial</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git status</code>
+                        <button class="copy-btn" data-copy="git status">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Mostra arquivos modificados, novos, removidos e
+                        alterações preparadas para commit.
+                    </p>
+                </article>
+
+                <article class="card" data-search="git add arquivo adicionar staging preparar alteração">
+                    <div class="card-top">
+                        <div>
+                            <h3>Adicionar um arquivo</h3>
+                            <p class="card-subtitle">Preparação seletiva.</p>
+                        </div>
+                        <span class="tag">Essencial</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git add arquivo.html</code>
+                        <button class="copy-btn"
+                            data-copy="git add arquivo.html">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Prepara um arquivo específico para entrar no próximo commit.
+                    </p>
+                    <p class="example">
+                        <strong>Exemplo:</strong> <code>git add index.html</code>
+                    </p>
+                </article>
+
+                <article class="card" data-search="git add ponto todos arquivos alterações pasta staging">
+                    <div class="card-top">
+                        <div>
+                            <h3>Adicionar alterações</h3>
+                            <p class="card-subtitle">Prepara várias alterações.</p>
+                        </div>
+                        <span class="tag">Essencial</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git add .</code>
+                        <button class="copy-btn" data-copy="git add .">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Prepara as alterações dentro da pasta atual e de suas
+                        subpastas, respeitando as regras do Git.
+                    </p>
+                    <p class="example">
+                        <strong>Dica:</strong> confira com <code>git status</code>
+                        antes de continuar.
+                    </p>
+                </article>
+
+                <article class="card" data-search="git commit mensagem salvar registrar versão histórico">
+                    <div class="card-top">
+                        <div>
+                            <h3>Criar um commit</h3>
+                            <p class="card-subtitle">Registra uma versão.</p>
+                        </div>
+                        <span class="tag">Essencial</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git commit -m "mensagem"</code>
+                        <button class="copy-btn"
+                            data-copy='git commit -m "mensagem"'>Copiar</button>
+                    </div>
+                    <p class="description">
+                        Registra no histórico as alterações que foram preparadas.
+                    </p>
+                    <p class="example">
+                        <strong>Exemplo:</strong>
+                        <code>git commit -m "Adiciona tela de login"</code>
+                    </p>
+                </article>
+
+                <article class="card" data-search="git diff comparar ver diferenças código alterações">
+                    <div class="card-top">
+                        <div>
+                            <h3>Ver diferenças</h3>
+                            <p class="card-subtitle">Compare as alterações locais.</p>
+                        </div>
+                        <span class="tag">Análise</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git diff</code>
+                        <button class="copy-btn" data-copy="git diff">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Mostra diferenças ainda não preparadas com git add.
+                    </p>
+                </article>
+
+                <article class="card" data-search="git commit amend alterar corrigir último commit mensagem">
+                    <div class="card-top">
+                        <div>
+                            <h3>Corrigir o último commit</h3>
+                            <p class="card-subtitle">Atualiza o commit mais recente.</p>
+                        </div>
+                        <span class="tag warning">Atenção</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git commit --amend</code>
+                        <button class="copy-btn"
+                            data-copy="git commit --amend">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Permite corrigir a mensagem ou incluir alterações
+                        preparadas no último commit.
+                    </p>
+                    <p class="warning-text">
+                        Evite alterar commits que já foram compartilhados,
+                        pois isso reescreve o histórico.
+                    </p>
+                </article>
+
             </div>
         </section>
 
-        <!-- Sincronização -->
+        <!-- SINCRONIZAÇÃO -->
+
         <section class="category-section" data-cat="sync">
-            <h2 class="category-title">🔄 Sincronização com Remoto</h2>
+            <div class="category-header">
+                <div class="category-icon">⇄</div>
+                <div>
+                    <h2>GitHub e sincronização</h2>
+                    <p>Conecte, envie e receba alterações.</p>
+                </div>
+                <span class="command-count">06 comandos</span>
+            </div>
+
             <div class="grid">
-                <div class="card">
-                    <div class="cmd-box"><code>git remote add origin [url]</code><button class="copy-btn" onclick="copyText('git remote add origin', this)">Copiar</button></div>
-                    <p class="description">Conecta o seu repositório local a um servidor remoto pela primeira vez.</p>
+
+                <article class="card" data-search="git remote add origin url conectar repositório github remoto">
+                    <div class="card-top">
+                        <div>
+                            <h3>Conectar ao GitHub</h3>
+                            <p class="card-subtitle">Adiciona um remoto.</p>
+                        </div>
+                        <span class="tag">Configuração</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git remote add origin URL</code>
+                        <button class="copy-btn"
+                            data-copy="git remote add origin URL">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Associa o repositório local a um repositório remoto.
+                    </p>
+                    <p class="example">
+                        <strong>Exemplo:</strong>
+                        <code>git remote add origin https://github.com/usuario/projeto.git</code>
+                    </p>
+                </article>
+
+                <article class="card" data-search="git remote -v visualizar conferir endereço remoto github origin">
+                    <div class="card-top">
+                        <div>
+                            <h3>Conferir a conexão</h3>
+                            <p class="card-subtitle">Mostra os remotos cadastrados.</p>
+                        </div>
+                        <span class="tag">Verificação</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git remote -v</code>
+                        <button class="copy-btn"
+                            data-copy="git remote -v">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Exibe os endereços utilizados para buscar e enviar
+                        alterações.
+                    </p>
+                </article>
+
+                <article class="card" data-search="git push origin main enviar publicar subir projeto github">
+                    <div class="card-top">
+                        <div>
+                            <h3>Enviar alterações</h3>
+                            <p class="card-subtitle">Publica commits no remoto.</p>
+                        </div>
+                        <span class="tag">Essencial</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git push origin main</code>
+                        <button class="copy-btn"
+                            data-copy="git push origin main">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Envia os commits da branch main para o GitHub.
+                    </p>
+                    <p class="example">
+                        <strong>Primeiro envio:</strong>
+                        <code>git push -u origin main</code>
+                    </p>
+                </article>
+
+                <article class="card" data-search="git pull baixar buscar integrar receber atualizações remoto github">
+                    <div class="card-top">
+                        <div>
+                            <h3>Receber atualizações</h3>
+                            <p class="card-subtitle">Busca e integra alterações.</p>
+                        </div>
+                        <span class="tag">Essencial</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git pull</code>
+                        <button class="copy-btn" data-copy="git pull">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Busca alterações do remoto rastreado e tenta integrá-las
+                        à branch atual.
+                    </p>
+                </article>
+
+                <article class="card" data-search="git fetch baixar buscar alterações remoto sem mesclar integrar">
+                    <div class="card-top">
+                        <div>
+                            <h3>Buscar sem integrar</h3>
+                            <p class="card-subtitle">Atualiza as referências remotas.</p>
+                        </div>
+                        <span class="tag">Análise</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git fetch</code>
+                        <button class="copy-btn" data-copy="git fetch">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Busca as novidades do remoto sem mesclá-las
+                        automaticamente à branch atual.
+                    </p>
+                </article>
+
+                <article class="card" data-search="git push -u origin main primeiro envio upstream rastrear branch">
+                    <div class="card-top">
+                        <div>
+                            <h3>Configurar o primeiro push</h3>
+                            <p class="card-subtitle">Define a branch de rastreamento.</p>
+                        </div>
+                        <span class="tag">Essencial</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git push -u origin main</code>
+                        <button class="copy-btn"
+                            data-copy="git push -u origin main">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Envia a branch e configura sua referência remota
+                        para facilitar os próximos pushes e pulls.
+                    </p>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- BRANCHES -->
+
+        <section class="category-section" data-cat="branch">
+            <div class="category-header">
+                <div class="category-icon">⑂</div>
+                <div>
+                    <h2>Branches e ramificações</h2>
+                    <p>Organize funcionalidades e trabalhe em paralelo.</p>
                 </div>
-                <div class="card">
-                    <div class="cmd-box"><code>git push origin [branch]</code><button class="copy-btn" onclick="copyText('git push origin', this)">Copiar</button></div>
-                    <p class="description">Envia as suas alterações locais para o servidor remoto.</p>
+                <span class="command-count">04 comandos</span>
+            </div>
+
+            <div class="grid">
+
+                <article class="card" data-search="git branch listar branches visualizar ramificações">
+                    <div class="card-top">
+                        <div>
+                            <h3>Listar branches</h3>
+                            <p class="card-subtitle">Veja as branches locais.</p>
+                        </div>
+                        <span class="tag">Básico</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git branch</code>
+                        <button class="copy-btn" data-copy="git branch">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Lista as branches locais e marca a branch atual.
+                    </p>
+                </article>
+
+                <article class="card" data-search="git switch -c criar nova branch funcionalidade">
+                    <div class="card-top">
+                        <div>
+                            <h3>Criar uma branch</h3>
+                            <p class="card-subtitle">Cria e acessa uma nova branch.</p>
+                        </div>
+                        <span class="tag">Básico</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git switch -c nova-feature</code>
+                        <button class="copy-btn"
+                            data-copy="git switch -c nova-feature">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Cria uma ramificação e muda para ela imediatamente.
+                    </p>
+                    <p class="example">
+                        <strong>Exemplo:</strong>
+                        <code>git switch -c tela-login</code>
+                    </p>
+                </article>
+
+                <article class="card" data-search="git switch main trocar mudar branch">
+                    <div class="card-top">
+                        <div>
+                            <h3>Trocar de branch</h3>
+                            <p class="card-subtitle">Muda para uma branch existente.</p>
+                        </div>
+                        <span class="tag">Básico</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git switch main</code>
+                        <button class="copy-btn"
+                            data-copy="git switch main">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Alterna para a branch main, se ela existir localmente.
+                    </p>
+                </article>
+
+                <article class="card" data-search="git merge unir mesclar integrar branch funcionalidade">
+                    <div class="card-top">
+                        <div>
+                            <h3>Mesclar branches</h3>
+                            <p class="card-subtitle">Integra uma branch à atual.</p>
+                        </div>
+                        <span class="tag">Intermediário</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git merge nome-branch</code>
+                        <button class="copy-btn"
+                            data-copy="git merge nome-branch">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Incorpora as alterações da branch indicada à branch atual.
+                    </p>
+                    <p class="example">
+                        <strong>Exemplo:</strong> estando em main,
+                        execute <code>git merge tela-login</code>.
+                    </p>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- HISTÓRICO E RECUPERAÇÃO -->
+
+        <section class="category-section" data-cat="history">
+            <div class="category-header">
+                <div class="category-icon">↶</div>
+                <div>
+                    <h2>Histórico e recuperação</h2>
+                    <p>Consulte versões e recupere alterações com cuidado.</p>
                 </div>
-                <div class="card">
-                    <div class="cmd-box"><code>git pull</code><button class="copy-btn" onclick="copyText('git pull', this)">Copiar</button></div>
-                    <p class="description">Baixa e mescla as alterações mais recentes do servidor remoto diretamente.</p>
-                </div>
-                <div class="card">
-                    <div class="cmd-box"><code>git fetch</code><button class="copy-btn" onclick="copyText('git fetch', this)">Copiar</button></div>
+                <span class="command-count">05 comandos</span>
+            </div>
+
+            <div class="grid">
+
+                <article class="card" data-search="git log histórico commits autores datas mensagens">
+                    <div class="card-top">
+                        <div>
+                            <h3>Consultar histórico</h3>
+                            <p class="card-subtitle">Lista os commits anteriores.</p>
+                        </div>
+                        <span class="tag">Básico</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git log</code>
+                        <button class="copy-btn" data-copy="git log">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Exibe os commits, autores, datas e mensagens.
+                    </p>
+                </article>
+
+                <article class="card" data-search="git log --oneline histórico resumido commits">
+                    <div class="card-top">
+                        <div>
+                            <h3>Histórico resumido</h3>
+                            <p class="card-subtitle">Uma linha por commit.</p>
+                        </div>
+                        <span class="tag">Prático</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git log --oneline</code>
+                        <button class="copy-btn"
+                            data-copy="git log --oneline">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Mostra os identificadores abreviados e as mensagens
+                        dos commits.
+                    </p>
+                </article>
+
+                <article class="card" data-search="git restore arquivo descartar alterações recuperar arquivo">
+                    <div class="card-top">
+                        <div>
+                            <h3>Descartar alterações locais</h3>
+                            <p class="card-subtitle">Restaura um arquivo.</p>
+                        </div>
+                        <span class="tag warning">Atenção</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git restore arquivo</code>
+                        <button class="copy-btn"
+                            data-copy="git restore arquivo">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Descarta as alterações não preparadas no arquivo
+                        e recupera sua versão do índice.
+                    </p>
+                    <p class="warning-text">
+                        Pode apagar trabalho não salvo em commit.
+                        Confira o arquivo antes de executar.
+                    </p>
+                </article>
+
+                <article class="card" data-search="git restore --staged retirar arquivo staging desmarcar add">
+                    <div class="card-top">
+                        <div>
+                            <h3>Retirar da preparação</h3>
+                            <p class="card-subtitle">Desfaz um git add.</p>
+                        </div>
+                        <span class="tag">Recuperação</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git restore --staged arquivo</code>
+                        <button class="copy-btn"
+                            data-copy="git restore --staged arquivo">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Remove o arquivo da área de preparação sem descartar
+                        suas alterações no diretório de trabalho.
+                    </p>
+                </article>
+
+                <article class="card" data-search="git revert commit desfazer alteração criar novo commit seguro histórico">
+                    <div class="card-top">
+                        <div>
+                            <h3>Reverter um commit</h3>
+                            <p class="card-subtitle">Cria um commit de reversão.</p>
+                        </div>
+                        <span class="tag">Intermediário</span>
+                    </div>
+                    <div class="cmd-box">
+                        <code>git revert HASH</code>
+                        <button class="copy-btn"
+                            data-copy="git revert HASH">Copiar</button>
+                    </div>
+                    <p class="description">
+                        Cria um novo commit que desfaz as mudanças de um
+                        commit anterior, preservando o histórico existente.
+                    </p>
+                    <p class="example">
+                        <strong>Exemplo:</strong>
+                        <code>git revert a1b2c3d</code>
+                    </p>
+                </article>
+
+            </div>
+        </section>
+
+    </div>
+
+    <div class="empty-state" id="empty-state">
+        <strong>Nenhum comando encontrado</strong>
+        Tente outra palavra ou selecione a categoria Todos.
+    </div>
+
+</main>
+
+<footer>
+    <div class="container">
+        <p><strong>GitGuide</strong> · Um guia prático para aprender Git.</p>
+        <p>Use os comandos com atenção e mantenha seu histórico organizado.</p>
+    </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+    Comando copiado!
+</div>
+
+<script>
+    const searchInput = document.getElementById("search");
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const sections = document.querySelectorAll(".category-section");
+    const cards = document.querySelectorAll(".card");
+    const workflow = document.getElementById("workflow");
+    const emptyState = document.getElementById("empty-state");
+    const resultCount = document.getElementById("result-count");
+    const toast = document.getElementById("toast");
+
+    let activeCategory = "all";
+    let toastTimer;
+
+    // FILTROS E BUSCA
+
+    function filterCommands() {
+        const query = searchInput.value
+            .trim()
+            .toLocaleLowerCase("pt-BR");
+
+        let visibleCards = 0;
+
+        cards.forEach(card => {
+            const section = card.closest(".category-section");
+            const category = section.dataset.cat;
+
+            const searchableText = (
+                card.innerText + " " +
+                (card.dataset.search || "") + " " +
+                section.innerText
+            ).toLocaleLowerCase("pt-BR");
+
+            const matchesCategory =
+                activeCategory === "all" ||
+                category === activeCategory;
+
+            const matchesSearch =
+                !query || searchableText.includes(query);
+
+            const visible = matchesCategory && matchesSearch;
+
+            card.hidden = !visible;
+
+            if (visible) {
+                visibleCards++;
+            }
+        });
+
+        sections.forEach(section => {
+            const hasVisibleCard = Array.from(
+                section.querySelectorAll(".card")
+            ).some(card => !card.hidden);
+
+            section.hidden = !hasVisibleCard;
+
+            const count = section.querySelectorAll(
+                ".card:not([hidden])"
+            ).length;
+
+            const countLabel = section.querySelector(".command-count");
+
+            if (countLabel) {
+                countLabel.textContent =
+                    count + (count === 1 ? " comando" : " comandos");
+            }
+        });
+
+        // A busca mostra os comandos, sem misturar o passo a passo
+        // com os resultados da biblioteca.
+
+        workflow.hidden = query.length > 0;
+
+        emptyState.style.display =
+            visibleCards === 0 ? "block" : "none";
+
+        resultCount.textContent =
+            visibleCards +
+            (visibleCards === 1
+                ? " comando encontrado"
+                : " comandos encontrados");
+    }
+
+    filterButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            activeCategory = button.dataset.filter;
+
+            filterButtons.forEach(item => {
+                const active = item === button;
+                item.classList.toggle("active", active);
+                item.setAttribute("aria-pressed", String(active));
+            });
+
+            filterCommands();
+        });
+
+        button.setAttribute(
+            "aria-pressed",
+            String(button.classList.contains("active"))
+        );
+    });
+
+    searchInput.addEventListener("input", filterCommands);
+
+    // COPIAR COMANDOS
+
+    async function copyCommand(text, button) {
+        const originalText = button.textContent;
+
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(text);
+            } else {
+                // Alternativa para ambientes sem acesso à Clipboard API.
+                const textarea = document.createElement("textarea");
+
+                textarea.value = text;
+                textarea.setAttribute("readonly", "");
+                textarea.style.position = "fixed";
+                textarea.style.left = "-9999px";
+                textarea.style.top = "0";
+
+                document.body.appendChild(textarea);
+                textarea.select();
+                textarea.setSelectionRange(0, textarea.value.length);
+
+                const successful = document.execCommand("copy");
+                textarea.remove();
+
+                if (!successful) {
+                    throw new Error("Não foi possível copiar.");
+                }
+            }
+
+            button.textContent = "Copiado!";
+            button.classList.add("copied");
+
+            showToast("Comando copiado para a área de transferência!");
+
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.classList.remove("copied");
+            }, 1600);
+
+        } catch (error) {
+            showToast("Não foi possível copiar. Selecione o comando manualmente.");
+        }
+    }
+
+    document.querySelectorAll("[data-copy]").forEach(button => {
+        button.addEventListener("click", () => {
+            copyCommand(button.dataset.copy, button);
+        });
+    });
+
+    // AVISO VISUAL
+
+    function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("show");
+
+        clearTimeout(toastTimer);
+
+        toastTimer = setTimeout(() => {
+            toast.classList.remove("show");
+        }, 2600);
+    }
+
+    // ATALHO DE BUSCA: pressione "/" para pesquisar.
+
+    document.addEventListener("keydown", event => {
+        const target = event.target;
+        const isTyping =
+            target instanceof HTMLInputElement ||
+            target instanceof HTMLTextAreaElement ||
+            target.isContentEditable;
+
+        if (
+            event.key === "/" &&
+            !isTyping &&
+            !event.ctrlKey &&
+            !event.metaKey &&
+            !event.altKey
+        ) {
+            event.preventDefault();
+            searchInput.focus();
+        }
+
+        if (event.key === "Escape" && target === searchInput) {
+            searchInput.value = "";
+            searchInput.blur();
+            filterCommands();
+        }
+    });
+
+    // CONTAGEM INICIAL
+
+    filterCommands();
+</script>
+
+</body>
+</html>
