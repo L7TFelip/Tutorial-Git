@@ -1,55 +1,40 @@
-Os principais comandos do Git para o controle de versão e trabalho em projetos estão organizados abaixo por categorias essenciais. Você pode consultar a documentação completa no Git Documentation.
 
-Configuração Inicial
+Iniciar e Configurar
 
-• git config --global user.name "Seu Nome": define o nome de usuário global.
-• git config --global user.email "seu@email.com": define o e-mail global.
+• git init: Inicializa um novo repositório Git local na pasta atual.
+• git clone [url]: Baixa um repositório existente da internet para a sua máquina.
+• git config --global user.name "[nome]": Define o nome que será associado aos seus commits.
+• git config --global user.email "[email]": Define o e-mail que será associado aos seus commits.
 
-Criação e Clonagem de Repositórios
+Fluxo Diário de Trabalho
 
-• git init: cria um novo repositório Git em uma pasta local.
-• git clone [url]: baixa uma cópia de um repositório remoto existente para sua máquina.
-
-Fluxo de Trabalho Básico
-
-• git status: exibe o estado atual dos arquivos (modificados, preparados ou não rastreados).
-• git add . ou git add [arquivo]: adiciona as alterações à área de preparação (staging area).
-• git commit -m "mensagem": salva as alterações preparadas no histórico local com uma mensagem descritiva.
-• git diff: mostra as diferenças detalhadas entre arquivos ou commits.
-• git log: exibe o histórico de commits do repositório.
-
-Ramos (Branches) e Mesclagem
-
-• git branch: lista, cria ou exclui ramos.
-• git checkout [branch] ou git switch [branch]: alterna entre ramos diferentes.
-• git checkout -b [nome] ou git switch -c [nome]: cria um novo ramo e muda para ele imediatamente.
-• git merge [branch]: une as alterações de outro ramo ao ramo atual.
+• git status: Mostra o estado atual dos seus arquivos (quais foram modificados, deletados ou criados).
+• git add [arquivo]: Salva as alterações de um arquivo específico na área de preparação (staging area).
+• git add .: Adiciona todas as modificações da pasta atual para a área de preparação.
+• git commit -m "[mensagem]": Grava permanentemente as alterações salvas na área de preparação no histórico local.
+• git commit --amend: Altera a mensagem do último commit realizado (caso ainda não tenha enviado para o servidor).
 
 Sincronização com Repositório Remoto
 
-• git remote -v: lista os repositórios remotos vinculados.
-• git fetch: baixa as atualizações do repositório remoto sem aplicá-las automaticamente no código.
-• git pull: baixa e mescla as alterações do repositório remoto para o ramo atual.
-• git push: envia os seus commits locais para o repositório remoto.
+• git remote add origin [url]: Conecta o seu repositório local a um servidor remoto (como GitHub ou GitLab) pela primeira vez.
+• git push origin [branch]: Envia as suas alterações locais para o servidor remoto.
+• git pull: Baixa e mescla as alterações mais recentes do servidor remoto diretamente no seu projeto atual.
+• git fetch: Baixa o histórico do servidor remoto para o seu computador, mas sem misturar com o seu código atual.
 
-Desfazendo Alterações
+Gerenciamento de Branches (Ramificações)
 
-• git reset --soft ou git reset --hard: retorna o repositório para um estado ou commit anterior.
-• git revert [hash]: cria um novo commit que desfaz as alterações feitas em um commit passado.
-• git stash: guarda temporariamente alterações não finalizadas para usar depois.
-Você gostaria de um exemplo prático de como criar e enviar seu primeiro projeto para o GitHub ou de como resolver conflitos de merge?
-• 
-GitHub
-Comandos Git - Aprenda Git do básico ao avançado
-* Config: git config --global user.name/email * Init/Clone: git init, git clone [url] * Basic: git add, status, diff, commit -m, r...
-• 
-somostera.com
-15 comandos git que vão te ajudar a programar - Tera | Lidere a mudança e transforme sua carreira
-Git: Sistema de controle de versão para gerenciar ramificações, rastrear alterações e manter histórico de códigos. Comandos essenc...
-• 
-DataCamp
-Os 20 principais comandos do Git com exemplos: Um guia prático
-Comandos básicos do Git. As etapas básicas do trabalho com o Git incluem a criação de um repositório, a cópia de um repositório ex...
-Mostrar tudo
-    
-As respostas da IA podem conter erros.        
+• git branch: Lista todas as branches locais do seu projeto.
+• git branch [nome-da-branch]: Cria uma nova ramificação com o nome escolhido.
+• git checkout [nome-da-branch]: Muda o seu ambiente de trabalho para a branch informada.
+• git checkout -b [nome-da-branch]: Cria uma nova branch e muda para ela imediatamente.
+• git merge [nome-da-branch]: Junta as alterações da branch informada com a sua branch atual.
+• git branch -d [nome-da-branch]: Apaga a branch indicada de forma segura.
+
+Histórico e Desfazer Alterações
+
+• git log: Exibe o histórico de todos os commits realizados no projeto.
+• git log --oneline: Mostra o histórico simplificado, exibindo apenas uma linha por commit.
+• git checkout -- [arquivo]: Descarta as modificações não salvas de um arquivo específico, voltando ao último commit.
+• git reset [arquivo]: Remove o arquivo da área de preparação, mantendo as alterações feitas nele.
+• git stash: Guarda temporariamente as alterações atuais sem fazer commit, limpando a mesa de trabalho para trocar de branch.
+• git stash pop: Recupera as alterações guardadas temporariamente de volta para o código.

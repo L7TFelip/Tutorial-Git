@@ -3,46 +3,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Página</title>
-
+    <title>Guia de Comandos Git</title>
     <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-color: #c9d1d9;
+            --text-bright: #f0f6fc;
+            --accent-color: #58a6ff;
+            --cmd-bg: #21262d;
+            --border-color: #30363d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
             text-align: center;
-            padding: 50px;
+            margin-bottom: 3rem;
         }
 
-        h1 {
-            color: #333;
+        header h1 {
+            color: var(--text-bright);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        p {
-            color: #666;
+        header p {
+            color: #8b949e;
+            font-size: 1.1rem;
         }
 
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+        /* Menu de Filtros */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .filter-btn {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
             cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
 
-        button:hover {
-            background-color: #0056b3;
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            border-color: var(--accent-color);
+        }
+
+        /* Categorias e Grid */
+        .category-section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 20px;
+        }
+
+        .category-title {
+            color: var(--text-bright);
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Cartões de Comando */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border-color: #444c56;
+        }
+
+        .cmd-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--cmd-bg);
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            margin-bottom: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #8b949e;
+            cursor: pointer;
+            padding: 0.2rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+        }
+
+        .copy-btn:hover {
+            color: var(--text-bright);
+        }
+
+        .description {
+            font-size: 0.95rem;
+            color: var(--text-color);
         }
     </style>
 </head>
 <body>
 
-    <h1>Bem-vindo!</h1>
-    <p>Esta é minha primeira página HTML.</p>
+<div class="container">
+    <header>
+        <h1>Guia de Comandos Git</h1>
+        <p>Sua folha de cola interativa para o terminal</p>
+    </header>
 
-    <button onclick="alert('Olá! Tudo funcionando!')">
-        Clique aqui
-    </button>
+    <!-- Filtros Dinâmicos -->
+    <div class="filters">
+        <button class="filter-btn active" onclick="filterCategory('all')">Todos</button>
+        <button class="filter-btn" onclick="filterCategory('init')">Iniciar & Configurar</button>
+        <button class="filter-btn" onclick="filterCategory('daily')">Fluxo Diário</button>
+        <button class="filter-btn" onclick="filterCategory('sync')">Sincronização</button>
+        <button class="filter-btn" onclick="filterCategory('branch')">Branches</button>
+        <button class="filter-btn" onclick="filterCategory('history')">Histórico & Desfazer</button>
+    </div>
 
-</body>
-</html>
+    <!-- Lista de Comandos -->
+    <main id="commands-list">
+        
+        <!-- Iniciar e Configurar -->
+        <section class="category-section" data-cat="init">
+            <h2 class="category-title">📁 Iniciar e Configurar</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="cmd-box"><code>git init</code><button class="copy-btn" onclick="copyText('git init', this)">Copiar</button></div>
+                    <p class="description">Inicializa um novo repositório Git local na pasta atual.</p>
+                </div>
+                <div class="card">
+                    <div class="cmd-box"><code>git clone [url]</code><button class="copy-btn" onclick="copyText('git clone', this)">Copiar</button></div>
+                    <p class="description">Baixa um repositório existente da internet para a sua máquina.</p>
+                </div>
+                <div class="card">
+                    <div class="cmd-box"><code>git config --global user.name "[nome]"</code><button class="copy-btn" onclick="copyText('git config --global user.name', this)">Copiar</button></div>
+                    <p class="description">Define o nome que será associado aos seus commits.</p>
+                </div>
+                <div class="card">
+                    <div class="cmd-box"><code>git config --global user.email "[email]"</code><button class="copy-btn" onclick="copyText('git config --global user.email', this)">Copiar</button></div>
+                    <p class="description">Define o e-mail que será associado aos seus commits.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fluxo Diário -->
+        <section class="category-section" data-cat="daily">
+            <h2 class="category-title">💻 Fluxo Diário de Trabalho</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="cmd-box"><code>git status</code><button class="copy-btn" onclick="copyText('git status', this)">Copiar</button></div>
+                    <p class="description">Mostra o estado atual dos seus arquivos (modificados, deletados ou criados).</p>
+                </div>
+                <div class="card">
+                    <div class="cmd-box"><code>git add [arquivo]</code><button class="copy-btn" onclick="copyText('git add', this)">Copiar</button></div>
+                    <p class="description">Salva as alterações de um arquivo específico na área de preparação (staging area).</p>
+                </div>
+                <div class="card">
+                    <div class="cmd-box"><code>git add .</code><button class="copy-btn" onclick="copyText('git add .', this)">Copiar</button></div>
+                    <p class="description">Adiciona todas as modificações da pasta atual para a área de preparação.</p>
+                </div>
+                <div class="card">
+                    <div class="cmd-box"><code>git commit -m "[mensagem]"</code><button class="copy-btn" onclick="copyText('git commit -m', this)">Copiar</button></div>
+                    <p class="description">Grava permanentemente as alterações no histórico local.</p>
+                </div>
+                <div class="card">
+                    <div class="cmd-box"><code>git commit --amend</code><button class="copy-btn" onclick="copyText('git commit --amend', this)">Copiar</button></div>
+                    <p class="description">Altera a mensagem do último commit realizado (antes do push).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sincronização -->
+        <section class="category-section" data-cat="sync">
+            <h2 class="category-title">🔄 Sincronização com Remoto</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="cmd-box"><code>git remote add origin [url]</code><button class="copy-btn" onclick="copyText('git remote add origin', this)">Copiar</button></div>
+                    <p class="description">Conecta o seu repositório local a um servidor remoto pela primeira vez.</p>
+                </div>
+                <div class="card">
+                    <div class="cmd-box"><code>git push origin [branch]</code><button class="copy-btn" onclick="copyText('git push origin', this)">Copiar</button></div>
+                    <p class="description">Envia as suas alterações locais para o servidor remoto.</p>
+                </div>
+                <div class="card">
+                    <div class="cmd-box"><code>git pull</code><button class="copy-btn" onclick="copyText('git pull', this)">Copiar</button></div>
+                    <p class="description">Baixa e mescla as alterações mais recentes do servidor remoto diretamente.</p>
+                </div>
+                <div class="card">
+                    <div class="cmd-box"><code>git fetch</code><button class="copy-btn" onclick="copyText('git fetch', this)">Copiar</button></div>
