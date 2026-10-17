@@ -1,26 +1,36 @@
 # Guia Básico de Comandos Git
 
-Um site simples e interativo para consultar os principais comandos Git, entender suas funções e copiá-los facilmente.
+Página de consulta rápida com os principais comandos do Git, explicados em português e prontos para copiar com um clique. Feita para quem está começando e quer salvar versões do projeto e enviá-las ao GitHub sem complicação.
 
-## Funcionalidades
-- Comandos organizados por categorias.
-- Botões para copiar comandos.
-- Interface com tema escuro.
-- Explicações simples para iniciantes.
-- Layout responsivo para computadores e celulares.
+---
 
-## Tecnologias utilizadas
-- HTML5
-- CSS3
-- JavaScript
+## O que tem no site
 
-## Como executar
-1. Clone o repositório ou baixe os arquivos do projeto.
-2. Abra o arquivo `index.html` no navegador.
-3. Escolha uma categoria e copie os comandos que desejar.
+- **18 comandos** explicados de forma simples, cada um com descrição e, quando útil, um exemplo de uso
+- **Botão "Copiar"** em cada comando, com aviso na tela quando a cópia é feita
+- **Filtros por categoria** para encontrar o comando mais rápido
+- **Seção "Como usar o Git no dia a dia"** com a sequência mais comum: `git add .`, `git commit` e `git push`
+- **Tema escuro** inspirado no visual do GitHub
+- **Layout responsivo**, que funciona bem no computador e no celular
 
-## Objetivo
-Facilitar o aprendizado dos comandos básicos do Git e auxiliar no gerenciamento de projetos e na utilização do GitHub.
+---
 
-## Autor
-Desenvolvido como um projeto de estudo de desenvolvimento web.
+## Categorias
+
+| Categoria | Comandos |
+|---|---|
+| Começar e configurar | `git init`, `git clone`, `git config` (nome e e-mail) |
+| Salvar alterações | `git status`, `git add`, `git commit` |
+| GitHub | `git remote add origin`, `git push`, `git pull`, `git remote -v` |
+| Branches | `git branch`, `git switch -c`, `git switch` |
+| Histórico | `git log --oneline`, `git diff` |
+
+---
+
+## Estrutura do projeto
+
+O projeto é um único arquivo HTML, com o CSS e o JavaScript dentro dele. Não depende de bibliotecas externas nem de internet para funcionar.
+
+```
+guia-git/
+└── index.html    # Estrutura, estilos e interatividade (filtros e botão de copiar)
